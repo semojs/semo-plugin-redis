@@ -20,6 +20,10 @@ class RedisLoader {
       throw new Error(`${redisKey} not found in redis config`)
     }
 
+    if (Utils._.isObject(redisConfig)) {
+      redisConfig.keyPrefix = redisConfig.keyPrefix || redisConfig.prefix || undefined
+    }
+
     return redisConfig
   }
 
