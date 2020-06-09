@@ -20,16 +20,17 @@ export const builder = function(yargs: any) {
 export const handler = async function(argv: any) {
   try {
     const appConfig = Utils.getApplicationConfig(argv)
-    const redisKey = Utils._.get(appConfig, 'semo-plugin-redis.redisKey')
-    const cache = await redis.load(redisKey)
+    const redisKey = Utils._.get(appConfig, 'semo-plugin-redis.defaultConnection')
+    const redisInstance = await redis.load(redisKey)
 
-    if (argv.arguments[0] === 'monitor') {
-      const monitor = await cache.monitor()
+    if (argv.cmd === 'monitor') {
+      const monitor = await redisInstance.monitor()
       monitor.on("monitor", console.log)
+      console.log('-------------------------------------')
       return
     }
 
-    const ret = await cache[argv.cmd].apply(cache, argv.arguments)
+    const ret = await redisInstance[argv.cmd].apply(redisInstance, argv.arguments)
     if (!argv.silent) {
       if (argv.json) {
         Utils.log(JSON.parse(ret))
