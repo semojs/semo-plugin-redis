@@ -6,8 +6,8 @@ class RedisLoader {
 
   async getConfigs() {
     const appConfig = Utils.getApplicationConfig()
-    const rcRedisConfig = Utils._.get(appConfig, 'semo-plugin-redis.connection')
-    const hookRedisConfig = await Utils.invokeHook('redis_connection')
+    const rcRedisConfig = Utils._.get(appConfig, 'semo-plugin-redis.connections')
+    const hookRedisConfig = await Utils.invokeHook('redis_connections')
     const finalRedisConfig = Utils._.merge(rcRedisConfig, hookRedisConfig)
     return finalRedisConfig
   }
