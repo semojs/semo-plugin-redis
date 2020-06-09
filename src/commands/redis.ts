@@ -22,6 +22,13 @@ export const handler = async function(argv: any) {
     const appConfig = Utils.getApplicationConfig(argv)
     const redisKey = Utils._.get(appConfig, 'semo-plugin-redis.redisKey')
     const cache = await redis.load(redisKey)
+
+    if (argv.arguments[0] === 'monitor') {
+      const monitor = await cache.monitor()
+      monitor.on("monitor", console.log)
+      return
+    }
+
     const ret = await cache[argv.cmd].apply(cache, argv.arguments)
     if (!argv.silent) {
       if (argv.json) {
