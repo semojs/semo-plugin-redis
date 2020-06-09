@@ -2,7 +2,7 @@ import { Utils } from '@semo/core'
 import { redis } from '..'
 
 export const command = 'redis <cmd> [arguments..]'
-export const desc = 'redis access tools'
+export const desc = 'Redis access tool'
 
 export const builder = function(yargs: any) {
   yargs.option('json', {
@@ -12,7 +12,8 @@ export const builder = function(yargs: any) {
     describe: 'Not output the result'
   })
   yargs.option('redis-key', {
-    describe: 'Set redis connection key to access'
+    describe: 'Set redis connection key to access',
+    alias: 'key'
   })
 }
 
