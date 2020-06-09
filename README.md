@@ -52,3 +52,6 @@ await cache.set('hello', 'world')
 const ret = cache.get('hello')
 ```
 
+## License
+
+MIT
