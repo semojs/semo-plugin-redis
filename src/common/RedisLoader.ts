@@ -4,6 +4,11 @@ import Redis from 'ioredis'
 
 class RedisLoader {
 
+  async getDefaultConnection() {
+    const appConfig = Utils.getApplicationConfig()
+    return Utils._.get(appConfig, 'semo-plugin-redis.defaultConnection')
+  }
+
   async getConfigs() {
     const appConfig = Utils.getApplicationConfig()
     const rcRedisConfig = Utils._.get(appConfig, 'semo-plugin-redis.connection')
