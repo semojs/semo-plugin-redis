@@ -4,7 +4,7 @@ import Redis from 'ioredis'
 
 class RedisLoader {
 
-  getDefaultConnection() {
+  get defaultConnection() {
     const appConfig = Utils.getApplicationConfig()
     return Utils._.get(appConfig, 'semo-plugin-redis.defaultConnection')
   }
