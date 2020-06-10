@@ -25,8 +25,10 @@ export const handler = async function(argv: any) {
 
     if (argv.cmd === 'monitor') {
       const monitor = await redisInstance.monitor()
-      monitor.on("monitor", console.log)
-      console.log('-------------------------------------')
+      monitor.on("monitor", (time, args, source, database) => {
+        Utils.log({ time, args, source, database })
+        Utils.log('-------------------------------------')
+      })
       return
     }
 
