@@ -1,6 +1,6 @@
-import { Utils } from '@semo/core'
 import { redis } from '..'
 
+export const plugin = 'redis'
 export const command = 'redis <cmd> [arguments..]'
 export const desc = 'Redis access tool'
 
@@ -18,9 +18,9 @@ export const builder = function(yargs: any) {
 }
 
 export const handler = async function(argv: any) {
+  const { Utils } = argv.$semo
   try {
-    const appConfig = Utils.getApplicationConfig(argv)
-    const redisKey = Utils._.get(appConfig, 'semo-plugin-redis.defaultConnection')
+    const redisKey = argv.redisKey || Utils.pluginConfig('defaultConnection')
     const redisInstance = await redis.load(redisKey)
 
     if (argv.cmd === 'monitor') {
