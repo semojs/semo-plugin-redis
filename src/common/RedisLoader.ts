@@ -31,7 +31,14 @@ class RedisLoader {
   }
 
   async load(redisKey) {
-    const redisConfig = Utils._.isObject(redisKey) ? redisKey : this.getConfig(redisKey)
+
+    let redisConfig
+    if (Utils._.isObject(redisKey)) {
+      redisConfig = redisKey
+    } else {
+      redisConfig = await this.getConfig(redisKey)
+    }
+
     const redis = new Redis(redisConfig)
 
     return redis
