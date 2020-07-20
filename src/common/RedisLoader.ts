@@ -30,7 +30,11 @@ class RedisLoader {
     return redisConfig
   }
 
-  async load(redisKey) {
+  async load(redisKey = '') {
+
+    if (!redisKey) {
+      redisKey = this.defaultConnection
+    }
 
     let redisConfig
     if (Utils._.isObject(redisKey)) {
