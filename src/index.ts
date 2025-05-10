@@ -1,5 +1,1 @@
-import RedisLoader from './common/RedisLoader'
-
-const redisLoader = new RedisLoader()
-
-export const redis: any = redisLoader
+export { RedisLoader } from './common/RedisLoader.js'

@@ -1,43 +1,40 @@
-import { Utils } from '@semo/core'
+import { Redis } from 'ioredis'
+import _ from 'lodash'
 
-import Redis from 'ioredis'
+export class RedisLoader {
+  configs: Record<string, Record<string, any>> = {}
+  defaultConnection: string = ''
 
-class RedisLoader {
-
-  get defaultConnection() {
-    return Utils.config('$plugin.redis.defaultConnection')
-  }
-
-  async getConfigs() {
-    const rcRedisConfig = Utils.config('$plugin.redis.connection')
-    const hookRedisConfig = await Utils.invokeHook('redis_connection')
-    const finalRedisConfig = Utils._.merge(rcRedisConfig, hookRedisConfig)
-    return finalRedisConfig
+  constructor(configs, defineConnection = null) {
+    this.configs = configs
+    if (defineConnection) {
+      this.defaultConnection = defineConnection
+    }
   }
 
   async getConfig(redisKey) {
-    const redisConfigs = await this.getConfigs()
+    const redisConfigs = this.configs
 
     const redisConfig = redisConfigs[redisKey]
     if (!redisConfig) {
       throw new Error(`${redisKey} not found in redis config`)
     }
 
-    if (Utils._.isObject(redisConfig)) {
-      redisConfig.keyPrefix = redisConfig.keyPrefix || redisConfig.prefix || undefined
+    if (_.isObject(redisConfig)) {
+      redisConfig.keyPrefix =
+        redisConfig.keyPrefix || redisConfig.prefix || undefined
     }
 
     return redisConfig
   }
 
   async load(redisKey = '') {
-
     if (!redisKey) {
       redisKey = this.defaultConnection
     }
 
     let redisConfig
-    if (Utils._.isObject(redisKey)) {
+    if (_.isObject(redisKey)) {
       redisConfig = redisKey
     } else {
       redisConfig = await this.getConfig(redisKey)
@@ -48,5 +45,3 @@ class RedisLoader {
     return redis
   }
 }
-
-export = RedisLoader

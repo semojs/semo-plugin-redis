@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_local # 指定容器名称
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes # 启用 AOF 持久化
+    volumes:
+      - redis_data:/data # 数据持久化
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro # 可选：自定义配置文件
+    environment:
+      - TZ=Asia/Shanghai # 设置时区
+    restart: always
+    networks:
+      - redis_network
+    healthcheck: # 健康检查
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  redis_network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
