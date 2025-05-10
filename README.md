@@ -1,5 +1,4 @@
-semo-plugin-redis
-------------------------
+## semo-plugin-redis
 
 A Semo plugin to provide integration with Redis.
 
@@ -19,34 +18,36 @@ $ semo redis ttl hello
 设置 .semorc.yml
 
 ```yml
-semo-plugin-redis:
-  redisKey: redis
-  connection:
-    redis:
-      host: 127.0.0.1
-      port: 6379
+$plugin:
+  redis:
+    defaultConnection: redis
+    connection:
+      redis:
+        host: 127.0.0.1
+        port: 6379
 ```
 
-或者用钩子的方式声明配置：
+Or use hook_redis_connection
 
 ```js
-export const hook_redis_connection = async () => {
-  return {
-    redis2: {
-      host: '127.0.0.1',
-      port: 6379
+export const hook_redis_connection = {
+  'semo-plugin-redis': () => {
+    return {
+      redis2: {
+        host: '127.0.0.1',
+        port: 6379,
+      },
     }
-  }
+  },
 }
 ```
 
-支持 Promise，所以也可以在这里去跟配置中心要配置。
-
-代码中使用：
+Use in code
 
 ```js
-import { redis } from 'semo-plugin-redis'
+import { RedisLoader } from 'semo-plugin-redis'
 
+const redis = new RedisLoader(connections, defaultConnection)
 const cache = await redis.load('redisKey')
 await cache.set('hello', 'world')
 const ret = cache.get('hello')
